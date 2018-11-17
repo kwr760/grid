@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 15, 2011 8:29:54 AM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+ <class name="com.roy.pdb.domain.File" table="FILE">
+  <id name="fileID" type="long">
+   <column name="FILEID"/>
+   <generator class="assigned"/>
+  </id>
+  <property generated="never" lazy="false" name="pathHash" type="java.lang.String">
+   <column name="PATHHASH"/>
+  </property>
+  <property generated="never" lazy="false" name="hashSHA1" type="java.lang.String">
+   <column name="HASHSHA1"/>
+  </property>
+  <property generated="never" lazy="false" name="hashMD5" type="java.lang.String">
+   <column name="HASHMD5"/>
+  </property>
+  <property generated="never" lazy="false" name="mediaPath" type="java.lang.String">
+   <column name="MEDIAPATH"/>
+  </property>
+  <property generated="never" lazy="false" name="mediaFilename" type="java.lang.String">
+   <column name="MEDIAFILENAME"/>
+  </property>
+  <property generated="never" lazy="false" name="internalPath" type="java.lang.String">
+   <column name="INTERNALPATH"/>
+  </property>
+  <property generated="never" lazy="false" name="fileTypeID" type="long">
+   <column name="FILETYPEID"/>
+  </property>
+  <property generated="never" lazy="false" name="fileSizeBytes" type="long">
+   <column name="FILESIZEBYTES"/>
+  </property>
+  <property generated="never" lazy="false" name="fileStatusID" type="long">
+   <column name="FILESTATUSID"/>
+  </property>
+  <property generated="never" lazy="false" name="sourceID" type="long">
+   <column name="SOURCEID"/>
+  </property>
+  <property generated="never" lazy="false" name="fileSetID" type="long">
+   <column name="FILESETID"/>
+  </property>
+  <property generated="never" lazy="false" name="documentOwners" type="java.lang.String">
+   <column name="DOCUMENTOWNERS"/>
+  </property>
+  <property generated="never" lazy="false" name="workOrderID" type="long">
+   <column name="WORKORDERID"/>
+  </property>
+  <property generated="never" lazy="false" name="directoryID" type="long">
+   <column name="DIRECTORYID"/>
+  </property>
+  <property generated="never" lazy="false" name="metaData" type="java.lang.String">
+   <column name="METADATA"/>
+  </property>
+ </class>
+</hibernate-mapping>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<!-- Database connection settings -->
+		<property name="connection.driver_class">org.mysql.jdbc.Driver</property>
+		<property name="connection.url">jdbc:mysql://dimension:3306/grid</property>
+		<property name="connection.username">royk</property>
+		<property name="connection.password">b11O0l74</property>
+
+		<!-- Connection pool -->		
+		<property name="c3p0.min_size">2</property>
+		<property name="c3p0.max_size">50</property>
+		<property name="c3p0.timeout">1800</property>
+		<property name="c3p0.idle_test_period">60</property>		
+		<property name="c3p0.max_statements">0</property>
+				
+		<!-- SQL dialect -->
+		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+		<!-- Disable the second-level cache -->
+		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+		<!-- Echo all executed SQL to stdout -->
+		<property name="show_sql">true</property>
+
+		<!-- possible values for hbm2ddl.auto: validate | update | create | create-drop -->
+		<!-- <property name="hbm2ddl.auto">validate</property> -->
+
+		<!-- Resolve later version of Hibernate issue running in JBOSS 5.1 -->
+		<property name="hibernate.validator.apply_to_ddl">false</property>
+		<property name="hibernate.validator.autoregister_listeners">false</property>
+
+		<mapping resource="com/roy/data/process/objects/Directory.hbm.xml" />
+		<mapping resource="com/roy/data/process/objects/File.hbm.xml" />
+		<mapping resource="com/roy/data/process/objects/FileStatus.hbm.xml" />
+		<mapping resource="com/roy/data/process/objects/FileType.hbm.xml" />
+	</session-factory>
+</hibernate-configuration>

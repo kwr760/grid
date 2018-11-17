@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.roy.data.objects">
+	<class name="FileType" table="`FileType`">
+		<id column="`FileTypeID`" name="FileTypeID">
+			<generator class="assigned" />
+		</id>
+		<property column="`FileTypeName`" generated="never"
+			lazy="false" name="FileTypeName" type="string" />
+	</class>
+</hibernate-mapping>

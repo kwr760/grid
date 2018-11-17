@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.roy.data.objects">
+	<class name="File" table="`File`">
+		<id column="`FileID`" name="FileID">
+			<generator class="increment" />
+		</id>
+		<property column="`DirectoryID`" generated="never"
+			lazy="false" name="DirectoryID" type="long" />
+		<property column="`FileSizeBytes`" generated="never"
+			lazy="false" name="FileSizeBytes" type="long" />
+		<property column="`FileStatusID`" generated="never"
+			lazy="false" name="FileStatusID" type="byte" />
+		<property column="`FileTypeID`" generated="never"
+			lazy="false" name="FileTypeID" type="integer" />
+		<property column="`HashMD5`" generated="never"
+			lazy="false" name="HashMD5" type="string" />
+		<property column="`HashSHA1`" generated="never"
+			lazy="false" name="HashSHA1" type="string" />
+	</class>
+</hibernate-mapping>

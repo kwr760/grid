@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<definitions id="Definition"
+             targetNamespace="http://www.omg.org/bpmn20"
+             typeLanguage="http://www.java.com/javaTypes"
+             expressionLanguage="http://www.mvel.org/2.0"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+             xmlns:g="http://www.jboss.org/drools/flow/gpd"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:tns="http://www.jboss.org/drools">
+
+  <itemDefinition id="_resultstatusItem" structureRef="String" />
+  <itemDefinition id="_gridtaskItem" structureRef="com.roy.objects.grid.GridTask" />
+  <itemDefinition id="_gridresultItem" structureRef="com.roy.objects.grid.GridResult" />
+  <itemDefinition id="_documentidItem" structureRef="long" />
+
+  <process processType="Private" isExecutable="true" id="com.roy.TaskManager.SimpleGridJob" name="SimpleGridJob" tns:version="1.1.0" >
+
+    <!-- process variables -->
+    <property id="resultstatus" itemSubjectRef="_resultstatusItem"/>
+    <property id="gridtask" itemSubjectRef="_gridtaskItem"/>
+    <property id="gridresult" itemSubjectRef="_gridresultItem"/>
+    <property id="documentid" itemSubjectRef="_documentidItem"/>
+
+    <!-- nodes -->
+    <startEvent id="_1" name="Start" />
+    <task id="_2" name="Grid Task" tns:taskName="Grid Task" >
+      <ioSpecification>
+        <dataInput id="_2_gridtaskInput" name="gridtask" />
+        <dataOutput id="_2_gridresultOutput" name="gridresult" />
+        <dataOutput id="_2_resultstatusOutput" name="resultstatus" />
+        <inputSet>
+          <dataInputRefs>_2_gridtaskInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_2_gridresultOutput</dataOutputRefs>
+          <dataOutputRefs>_2_resultstatusOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <sourceRef>gridtask</sourceRef>
+        <targetRef>_2_gridtaskInput</targetRef>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_2_gridresultOutput</sourceRef>
+        <targetRef>gridresult</targetRef>
+      </dataOutputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_2_resultstatusOutput</sourceRef>
+        <targetRef>resultstatus</targetRef>
+      </dataOutputAssociation>
+    </task>
+    <inclusiveGateway id="_3" name="Gateway" gatewayDirection="Diverging" />
+    <task id="_4" name="Grid Task Error Notification" tns:taskName="Grid Task Error Notification" >
+      <ioSpecification>
+        <dataInput id="_4_gridresultInput" name="gridresult" />
+        <dataOutput id="_4_gridresultOutput" name="gridresult" />
+        <inputSet>
+          <dataInputRefs>_4_gridresultInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_4_gridresultOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <sourceRef>gridresult</sourceRef>
+        <targetRef>_4_gridresultInput</targetRef>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_4_gridresultOutput</sourceRef>
+        <targetRef>gridresult</targetRef>
+      </dataOutputAssociation>
+    </task>
+    <exclusiveGateway id="_5" name="Gateway" gatewayDirection="Converging" />
+    <endEvent id="_6" name="End" >
+        <terminateEventDefinition/>
+    </endEvent>
+    <task id="_7" name="Finalize " tns:taskName="Finalize Task" >
+      <ioSpecification>
+        <dataInput id="_7_gridresultInput" name="gridresult" />
+        <inputSet>
+          <dataInputRefs>_7_gridresultInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <sourceRef>gridresult</sourceRef>
+        <targetRef>_7_gridresultInput</targetRef>
+      </dataInputAssociation>
+    </task>
+    <task id="_8" name="Retrieve Document" tns:taskName="Retrieve Document" >
+      <ioSpecification>
+        <dataInput id="_8_documentidInput" name="documentid" />
+        <dataOutput id="_8_gridtaskOutput" name="gridtask" />
+        <inputSet>
+          <dataInputRefs>_8_documentidInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_8_gridtaskOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <sourceRef>documentid</sourceRef>
+        <targetRef>_8_documentidInput</targetRef>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_8_gridtaskOutput</sourceRef>
+        <targetRef>gridtask</targetRef>
+      </dataOutputAssociation>
+    </task>
+
+    <!-- connections -->
+    <sequenceFlow id="_8-_2" sourceRef="_8" targetRef="_2" />
+    <sequenceFlow id="_2-_3" sourceRef="_2" targetRef="_3" />
+    <sequenceFlow id="_3-_4" sourceRef="_3" targetRef="_4" name="Has document errors" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return resultstatus != null;</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_4-_5" sourceRef="_4" targetRef="_5" />
+    <sequenceFlow id="_3-_5" sourceRef="_3" targetRef="_5" name="No document errors" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return resultstatus == null;</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_7-_6" sourceRef="_7" targetRef="_6" />
+    <sequenceFlow id="_5-_7" sourceRef="_5" targetRef="_7" />
+    <sequenceFlow id="_1-_8" sourceRef="_1" targetRef="_8" />
+
+  </process>
+
+  <bpmndi:BPMNDiagram>
+    <bpmndi:BPMNPlane bpmnElement="com.roy.TaskManager.SimpleGridJob" >
+      <bpmndi:BPMNShape bpmnElement="_1" >
+        <dc:Bounds x="0" y="0" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_2" >
+        <dc:Bounds x="187" y="69" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_3" >
+        <dc:Bounds x="331" y="68" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_4" >
+        <dc:Bounds x="464" y="68" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_5" >
+        <dc:Bounds x="333" y="245" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_6" >
+        <dc:Bounds x="333" y="408" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_7" >
+        <dc:Bounds x="306" y="328" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_8" >
+        <dc:Bounds x="11" y="70" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_8-_2" >
+        <di:waypoint x="61" y="94" />
+        <di:waypoint x="237" y="93" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_2-_3" >
+        <di:waypoint x="237" y="93" />
+        <di:waypoint x="355" y="92" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_3-_4" >
+        <di:waypoint x="355" y="92" />
+        <di:waypoint x="514" y="92" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_4-_5" >
+        <di:waypoint x="514" y="92" />
+        <di:waypoint x="357" y="269" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_3-_5" >
+        <di:waypoint x="355" y="92" />
+        <di:waypoint x="357" y="269" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_7-_6" >
+        <di:waypoint x="356" y="352" />
+        <di:waypoint x="357" y="432" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_5-_7" >
+        <di:waypoint x="357" y="269" />
+        <di:waypoint x="356" y="352" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_1-_8" >
+        <di:waypoint x="24" y="24" />
+        <di:waypoint x="61" y="94" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+
+</definitions>
